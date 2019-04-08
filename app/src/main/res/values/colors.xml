@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#0255fa</color>
+    <color name="colorAccent">#ff2090ea</color>
+    <color name="white">#ffffff</color>
+    <color name="exo_icon">#0468f4</color>
+    <color name="blackish">#29000000</color>
+    <color name="signal_primary">#ff2090ea</color>
+
+    <color name="core_blue">#2090ea</color>
+    <color name="core_green">#4caf50</color>
+    <color name="core_red">#f44336</color>
+    <color name="core_red_highlight">#ef5350</color>
+
+    <color name="core_white">#ffffff</color>
+    <color name="core_black">#000000</color>
+
+    <color name="core_grey_02">#f8f9f9</color>
+    <color name="core_grey_05">#eeefef</color>
+    <color name="core_grey_15">#d5d6d6</color>
+    <color name="core_grey_25">#bbbdbe</color>
+    <color name="core_grey_45">#898a8c</color>
+    <color name="core_grey_60">#6b6d70</color>
+    <color name="core_grey_75">#3d3e44</color>
+    <color name="core_grey_85">#23252a</color>
+    <color name="core_grey_90">#17191d</color>
+    <color name="core_grey_95">#0f1012</color>
+
+
+
+
+
+
+    <color name="transparent_black_05">#05000000</color>
+    <color name="transparent_black_10">#10000000</color>
+    <color name="transparent_black_20">#20000000</color>
+    <color name="transparent_black_30">#30000000</color>
+    <color name="transparent_black_40">#40000000</color>
+    <color name="transparent_black_70">#70000000</color>
+    <color name="transparent_black_90">#90000000</color>
+
+    <color name="transparent_white_05">#05ffffff</color>
+    <color name="transparent_white_10">#10ffffff</color>
+    <color name="transparent_white_20">#20ffffff</color>
+    <color name="transparent_white_30">#30ffffff</color>
+    <color name="transparent_white_40">#40ffffff</color>
+    <color name="transparent_white_60">#60ffffff</color>
+    <color name="transparent_white_70">#70ffffff</color>
+    <color name="transparent_white_aa">#aaffffff</color>
+    <color name="transparent_white_bb">#bbffffff</color>
+    <color name="transparent_white_dd">#ddffffff</color>
+
+
+
+</resources>
