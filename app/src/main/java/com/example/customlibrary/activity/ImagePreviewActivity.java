@@ -93,9 +93,11 @@ public class ImagePreviewActivity extends AppCompatActivity implements
         moreImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                pickMore();
+                //finish();
             }
         });
+
         images= getIntent().getParcelableArrayListExtra("data");
         if(images.size()>0){
             displayImage(images);
@@ -209,7 +211,12 @@ public class ImagePreviewActivity extends AppCompatActivity implements
 
 
     }
-
+    public void pickMore(){
+        images.clear();
+        imagePreviewAdapter.notifyDataSetChanged();
+        imagePreviewBottomIconAdapter.notifyDataSetChanged();
+        finish();
+    }
 
     public void takePicture() {
         try {

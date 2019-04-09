@@ -19,6 +19,8 @@ import android.widget.Toast;
 //
 //import com.example.customlibrary.MediaCode.ExtendedOnPageChangedListener;
 //import com.example.customlibrary.MediaCode.MediaItemPagerAdaptor;
+import com.example.customlibrary.MediaCode.ExtendedOnPageChangedListener;
+import com.example.customlibrary.MediaCode.MediaItemPagerAdaptor;
 import com.example.customlibrary.R;
 import com.example.customlibrary.adapter.VideoPreviewAdaptor;
 
@@ -39,14 +41,16 @@ public class VideoPreviewActivty extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private RecyclerView video_preview_icon_recycler_view;
     private LinearLayoutManager layoutManager;
+    private ArrayList<VideoPreviewFragment> videoPreviewFragmentArrayList=new ArrayList<>();
     private LinearLayoutManager linearLayoutManager1;
     private ViewPager viewPager;
     private VideoPreviewViewPagerAdaptor videoPreviewViewPagerAdaptor;
-
+    private MediaItemPagerAdaptor mediaItemAdapter;
 
 
     private DefaultTrackSelector trackSelector;
     private ExoPlayer player;
+
 
 
     protected int mPreviousPos = 0;
@@ -75,8 +79,6 @@ public class VideoPreviewActivty extends AppCompatActivity implements
                 finish();
             }
         });
-
-
         initRecyclerView();
     }
 
@@ -98,63 +100,64 @@ public class VideoPreviewActivty extends AppCompatActivity implements
         chosenVideoList= getIntent().getParcelableArrayListExtra("data");
 
         if(chosenVideoList.size()>0){
-            viewPager = (ViewPager) findViewById(R.id.view_pager);
-            videoPreviewViewPagerAdaptor =new VideoPreviewViewPagerAdaptor(getSupportFragmentManager(),chosenVideoList,this);
+            ExperimentVideo();
 
-//            for (ChosenMediaFile video: chosenVideoList) {
-//                videoPreviewViewPagerAdaptor.addFragment(VideoPreviewFragment.newInstance(video.getUri(),VideoPreviewActivty.this));
-//            }
-
-            viewPager.setAdapter(videoPreviewViewPagerAdaptor);
-            viewPager.setCurrentItem(mPreviousPos,false);
-            viewPager.setOffscreenPageLimit(chosenVideoList.size());
-
-            DisplayVideosIcons(chosenVideoList);
-            onRotateVideos(0);
-
-            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-              @Override
-              public void onPageScrolled(int position, float v, int i1) {
-
-                  try {
-
-
-                      ((VideoPreviewFragment)videoPreviewViewPagerAdaptor.getItem(mPreviousPos)).HiddenNow();
-                     // ((VideoPreviewFragment)videoPreviewViewPagerAdaptor.getItem(position)).VisibleNow();
-                     ((VideoPreviewFragment)videoPreviewViewPagerAdaptor.getItem(position)).VisibleNow();
-
-
-//                      videoPreviewViewPagerAdaptor.getFragmentList(position).VisibleNow();
-//                      videoPreviewViewPagerAdaptor.getFragmentList(mPreviousPos).HiddenNow();
-
-                  } catch (Exception e) {
-                      e.printStackTrace();
-                  }
-
-                  mPreviousPos = position;
-              }
-
-              @Override
-              public void onPageSelected(int position) {
-                 //  mPreviousPos = position;
-                  Log.d("TAG", "onPageSelected: "+position+" "+mPreviousPos);
-                  //videoPreviewViewPagerAdaptor.getFragmentList(mPreviousPos).HiddenNow();
-                  curent_recycler_position= position;
-                  onRotateVideos(position);
-              }
-
-              @Override
-              public void onPageScrollStateChanged(int i) {
-                     // releaseExoplayer();
-              }
-          });
+//            viewPager = (ViewPager) findViewById(R.id.view_pager);
+//            videoPreviewViewPagerAdaptor =new VideoPreviewViewPagerAdaptor(getSupportFragmentManager(),chosenVideoList,this);
+//
+////            for (ChosenMediaFile video: chosenVideoList) {
+////                videoPreviewViewPagerAdaptor.addFragment(VideoPreviewFragment.newInstance(video.getUri(),VideoPreviewActivty.this));
+////            }
+//
+//            viewPager.setAdapter(videoPreviewViewPagerAdaptor);
+//            //viewPager.setCurrentItem(mPreviousPos,false);
+//            viewPager.setOffscreenPageLimit(1);
+//
+//            DisplayVideosIcons(chosenVideoList);
+//            onRotateVideos(0);
+//
+//            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//              @Override
+//              public void onPageScrolled(int position, float v, int i1) {
+//
+//                  try {
+//
+//
+//                      ((VideoPreviewFragment)videoPreviewViewPagerAdaptor.getItem(mPreviousPos)).HiddenNow();
+////                      ((VideoPreviewFragment)videoPreviewViewPagerAdaptor.getItem(position)).VisibleNow();
+//                     ((VideoPreviewFragment)videoPreviewViewPagerAdaptor.getItem(position)).VisibleNow();
+////                     VideoPreviewFragment videoPreviewFragment=(VideoPreviewFragment) videoPreviewViewPagerAdaptor.getItem(position);
+////                     videoPreviewFragmentArrayList.add(videoPreviewFragment);
+////                     videoPreviewFragment.VisibleNow();
+//
+//
+//                  } catch (Exception e) {
+//                      e.printStackTrace();
+//                  }
+//
+//                  mPreviousPos = position;
+//              }
+//
+//              @Override
+//              public void onPageSelected(int position) {
+//                 //  mPreviousPos = position;
+//                  Log.d("TAG", "onPageSelected: "+position+" "+mPreviousPos);
+//                  //videoPreviewViewPagerAdaptor.getFragmentList(mPreviousPos).HiddenNow();
+//                  curent_recycler_position= position;
+//                  onRotateVideos(position);
+//              }
+//
+//              @Override
+//              public void onPageScrollStateChanged(int i) {
+//                     // releaseExoplayer();
+//              }
+//          });
         }
 
         moreVideos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //PickVideos();
-                finish();
+                 pickMore();
             }
         });
 
@@ -192,13 +195,12 @@ public class VideoPreviewActivty extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
         switch (id){
             case R.id.delete:
                 DeleteSelectedVideo();
                 break;
             case R.id.moreVideos:
-                finish();
+               pickMore();
                 break;
             default:
                 return true;
@@ -210,6 +212,17 @@ public class VideoPreviewActivty extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    public void pickMore(){
+        chosenVideoList.clear();
+        mediaItemAdapter.notifyDataSetChanged();
+        finish();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     @Override
     public void onVideoSelecte(VideoPreviewAdaptor.MyViewHolder holder, int position) {
@@ -252,76 +265,81 @@ public class VideoPreviewActivty extends AppCompatActivity implements
         if(chosenVideoList.size()==1){
             return;
         }
-        if(chosenVideoList!=null && curent_recycler_position>=0 && curent_recycler_position<chosenVideoList.size()){
-           // videoPreviewAdaptor.ReleasePlayer();
-            this.chosenVideoList.remove(curent_recycler_position);
 
-            videoPreviewViewPagerAdaptor.notifyDataSetChanged();
-            videoPreviewBottomIconAdaptor.notifyItemRemoved(curent_recycler_position);
-            videoPreviewBottomIconAdaptor.notifyItemRangeChanged(curent_recycler_position, chosenVideoList.size());
-            //videoPreviewAdaptor.notifyDataSetChanged();
-            //videoPreviewBottomIconAdaptor.notifyDataSetChanged();
-
+//
+//        if(chosenVideoList!=null && curent_recycler_position>=0 && curent_recycler_position<chosenVideoList.size()){
+//           // videoPreviewAdaptor.ReleasePlayer();
+//            this.chosenVideoList.remove(curent_recycler_position);
+//
+////            videoPreviewViewPagerAdaptor.notifyDataSetChanged();
+//            mediaItemAdapter.notifyDataSetChanged();
+//            videoPreviewBottomIconAdaptor.notifyItemRemoved(curent_recycler_position);
+//            videoPreviewBottomIconAdaptor.notifyItemRangeChanged(curent_recycler_position, chosenVideoList.size());
+//            //videoPreviewAdaptor.notifyDataSetChanged();
+//            //videoPreviewBottomIconAdaptor.notifyDataSetChanged();
+//
+//
+//        }
+        else if(chosenVideoList!=null){
+            chosenVideoList.remove(curent_recycler_position);
+            //curent_recycler_position=curent_recycler_position+1;
+            if(curent_recycler_position==chosenVideoList.size()){
+                curent_recycler_position=chosenVideoList.size()-1;
+            }
+            chosenVideoList.get(curent_recycler_position).setIsSelected(1);
+            mediaItemAdapter.notifyDataSetChanged();
+            videoPreviewBottomIconAdaptor.notifyDataSetChanged();
+            video_preview_icon_recycler_view.getLayoutManager().scrollToPosition(curent_recycler_position);
 
         }
 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode== RESULT_OK){
+    protected void onPause() {
+        super.onPause();
+        mediaItemAdapter.onPause(viewPager.getCurrentItem());
+    }
+
+    private class ViewPagerChangeListener  extends ExtendedOnPageChangedListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            super.onPageScrolled(position, positionOffset, positionOffsetPixels);
 
         }
 
+        @Override
+        public void onPageSelected(int position) {
+            //Toast.makeText(getApplicationContext(),"selecting page"+position,Toast.LENGTH_LONG).show();
+            mPreviousPos=curent_recycler_position;
+            mediaItemAdapter.onPause(mPreviousPos);
+            curent_recycler_position= position;
+            onRotateVideos(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            super.onPageScrollStateChanged(state);
+        }
     }
 
-//    private class ViewPagerChangeListener  extends ExtendedOnPageChangedListener {
-//
-//        @Override
-//        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-//
-//        }
-//
-//        @Override
-//        public void onPageSelected(int position) {
-//            //Toast.makeText(getApplicationContext(),"selecting page"+position,Toast.LENGTH_LONG).show();
-//
-//            curent_recycler_position= position;
-//            onRotateVideos(position);
-//        }
-//
-//        @Override
-//        public void onPageUnselected(int position) {
-//           // mediaItemAdapter.setAutoPlay(false);
-//            Toast.makeText(getApplicationContext(),"unselecting page"+position,Toast.LENGTH_LONG).show();
-//           // mediaItemAdapter.onPause(position);
-//
-//        }
-//
-//        @Override
-//        public void onPageScrollStateChanged(int state) {
-//            super.onPageScrollStateChanged(state);
-//        }
-//    }
-//
-//    public void ExperimentVideo(){
-//        //expermient code
-//        if(chosenVideoList.size()>0){
-//            viewPager = (ViewPager) findViewById(R.id.view_pager);
-//            mediaItemAdapter =new MediaItemPagerAdaptor(this);
-//            mediaItemAdapter.setData(chosenVideoList);
-//            viewPager.setAdapter(mediaItemAdapter);
-//            viewPager.setOffscreenPageLimit(1);
-//
-//            DisplayVideosIcons(chosenVideoList);
-//            onRotateVideos(0);
-//            viewPager.addOnPageChangeListener(new ViewPagerChangeListener());
-//
-//
-//        }
-//
-//
-//    }
+    public void ExperimentVideo(){
+        //expermient code
+        if(chosenVideoList.size()>0){
+            viewPager = (ViewPager) findViewById(R.id.view_pager);
+            mediaItemAdapter =new MediaItemPagerAdaptor(this);
+            mediaItemAdapter.setData(chosenVideoList);
+            viewPager.setAdapter(mediaItemAdapter);
+            viewPager.setOffscreenPageLimit(1);
+
+            DisplayVideosIcons(chosenVideoList);
+            onRotateVideos(0);
+            viewPager.addOnPageChangeListener(new ViewPagerChangeListener());
+
+
+        }
+
+
+    }
 }

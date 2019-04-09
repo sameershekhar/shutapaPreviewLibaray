@@ -53,12 +53,7 @@ public class VideoPreviewViewPagerAdaptor extends FragmentStatePagerAdapter {
         return PagerAdapter.POSITION_NONE;
     }
 
-//    @Override
-//    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-//        if(view==object)
-//            return true;
-//        else return false;
-//    }
+
 
     public void addFragment(Fragment fragment) {
         mFragmentList.add(fragment);
@@ -75,13 +70,9 @@ public class VideoPreviewViewPagerAdaptor extends FragmentStatePagerAdapter {
 //        fragments.put(position,videoPreviewFragment);
 //        return videoPreviewFragment;
 //    }
-//
+
 //    @Override
 //    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-//        Log.d("TAG", "destroyItem: "+position);
-//        VideoPreviewFragment videoPreviewFragment=(VideoPreviewFragment)object;
-//        videoPreviewFragment.DestroyNow();
-//        fragments.remove(position);
 //        super.destroyItem(container, position, object);
 //    }
 //

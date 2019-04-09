@@ -24,7 +24,7 @@
                 android:id="@+id/video_ok"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_marginEnd="@dimen/margin10"
-                android:textSize="18dp"
+                android:textSize="24dp"
                 android:layout_gravity="right"
                 />
 

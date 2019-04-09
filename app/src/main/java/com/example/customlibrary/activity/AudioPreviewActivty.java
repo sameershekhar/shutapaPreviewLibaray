@@ -97,7 +97,7 @@ public class AudioPreviewActivty extends AppCompatActivity implements AudioPrevi
         moreAudios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                pickMore();
             }
         });
     }
@@ -225,6 +225,7 @@ public class AudioPreviewActivty extends AppCompatActivity implements AudioPrevi
 
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -241,7 +242,7 @@ public class AudioPreviewActivty extends AppCompatActivity implements AudioPrevi
                 deleteSelectedAudio();
                 break;
             case R.id.moreAudios:
-                finish();
+                pickMore();
                 break;
             default:
                 return true;
@@ -283,23 +284,12 @@ public class AudioPreviewActivty extends AppCompatActivity implements AudioPrevi
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//        if(resultCode== RESULT_OK){
-//             if(requestCode == Picker.PICK_AUDIO ) {
-//                audioPicker.submit(data);
-//            }
-//        }
-
+    public void pickMore(){
+        chosenAudioArrayList.clear();
+        audioPreviewAdaptor.notifyDataSetChanged();
+        audioPreviewBottomIconAdaptor.notifyDataSetChanged();
+        finish();
     }
-
-//    @Override
-//    public void onAudiosChosen(List<ChosenMediaFile> audios) {
-//        this.chosenAudioArrayList.addAll(audios);
-//        audioPreviewAdaptor.notifyDataSetChanged();
-//       // videoPreviewBottomIconAdaptor.notifyDataSetChanged();
-//    }
 
 
     @Override
